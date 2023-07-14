@@ -51,5 +51,13 @@ class UserService {
             console.log(error);
         }
     }
+    checkPassword(userInputPlainPassword, encryptedPassword) {
+        try {
+            return bcrypt.compareSync(userInputPlainPassword, encryptedPassword);
+        } catch (error) {
+            console.log("something went wrong in service layer");
+            console.log(error);
+        }
+    }
 }
 module.exports = UserService;
