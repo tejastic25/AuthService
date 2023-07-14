@@ -11,9 +11,12 @@ class UserRespository {
             console.log(error);
         }
     }
-    async get(userId) {
+    async getById(userId) {
         try {
-            const user = await User.findByPk(userId);
+            const user = await User.findByPk(userId, {
+                attributes: ['email', 'id']
+            });
+            console.log(user);
             return user;
 
         } catch (error) {
