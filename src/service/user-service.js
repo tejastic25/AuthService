@@ -1,6 +1,7 @@
 const { UserRepository } = require('../repository/index');
 const { JWT_KEY } = require('../config/serverConfig');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 class UserService {
     constructor() {
@@ -29,7 +30,7 @@ class UserService {
         }
     }
 
-    async signIn(email, plainPassword) {
+    async SignIn(email, plainPassword) {
         try {
             const user = await this.repository.getByEmail(email);
             if (!this.checkPassword(plainPassword, user.password)) {
@@ -47,7 +48,7 @@ class UserService {
 
     createToken(user) {
         try {
-            var token = jwt.sign(user, JWT_KEY, { expiresIn: 30 });
+            var token = jwt.sign(user, JWT_KEY, { expiresIn: 60 });
             console.log(token);
             return token;
 
@@ -67,7 +68,7 @@ class UserService {
             console.log(error);
         }
     }
-    
+
     checkPassword(userInputPlainPassword, encryptedPassword) {
         try {
             return bcrypt.compareSync(userInputPlainPassword, encryptedPassword);

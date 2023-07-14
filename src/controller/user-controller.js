@@ -51,7 +51,7 @@ const GetById = async (req, res) => {
 
 const SignIn = async (req, res) => {
     try {
-        const user = await userService.signIn(req.body.id, req.body.password);
+        const user = await userService.SignIn(req.body.email, req.body.password);
         console.log(user);
         return res.status(SuccessCodes.OK).json({
             data: user,
@@ -70,5 +70,5 @@ const SignIn = async (req, res) => {
 }
 
 module.exports = {
-    CreateUser, GetById ,SignIn
+    CreateUser, GetById, SignIn
 }
