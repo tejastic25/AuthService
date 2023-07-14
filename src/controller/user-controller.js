@@ -3,6 +3,7 @@ const { ClientErrorCodes,
     ServerErrorCodes,
     SuccessCodes } = require('../utils/error-codes');
 const userService = new UserService();
+
 const CreateUser = async (req, res) => {
     try {
         const newUserData = {
@@ -26,6 +27,7 @@ const CreateUser = async (req, res) => {
         });
     }
 }
+
 const GetById = async (req, res) => {
     try {
 
@@ -46,6 +48,27 @@ const GetById = async (req, res) => {
         });
     }
 }
+
+const SignIn = async (req, res) => {
+    try {
+        const user = await userService.signIn(req.body.id, req.body.password);
+        console.log(user);
+        return res.status(SuccessCodes.OK).json({
+            data: user,
+            success: true,
+            message: "user signed-in succesfully ",
+            err: {}
+        });
+    } catch (error) {
+        return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
+            data: {},
+            success: true,
+            message: "error in signing in user ",
+            err: error
+        });
+    }
+}
+
 module.exports = {
-    CreateUser, GetById
+    CreateUser, GetById ,SignIn
 }
