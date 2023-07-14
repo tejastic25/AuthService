@@ -22,9 +22,20 @@ class UserRespository {
         } catch (error) {
             console.log("something went wrong in the repository layer");
             console.log(error);
-
         }
-
+    }
+    async getByEmail(userEmail) {
+        try {
+            const user = await User.findByOne({
+                where: {
+                    email: userEmail
+                }
+            });
+            return user;
+        } catch (error) {
+            console.log("something went wrong in the repository layer");
+            console.log(error);
+        }
     }
 
 }

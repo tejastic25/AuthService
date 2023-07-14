@@ -40,7 +40,7 @@ class UserService {
             console.log(error);
         }
     }
-   
+
     verifyToken(token) {
         try {
             var response = jwt.verify(token, JWT_KEY);
@@ -51,7 +51,5 @@ class UserService {
             console.log(error);
         }
     }
-
-
 }
 module.exports = UserService;
