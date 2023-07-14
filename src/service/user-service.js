@@ -29,7 +29,28 @@ class UserService {
         }
     }
 
-  
+    createToken(user) {
+        try {
+            var token = jwt.sign(user, JWT_KEY, { expiresIn: 30 });
+            console.log(token);
+            return token;
+
+        } catch (error) {
+            console.log("something went wrong in service layer");
+            console.log(error);
+        }
+    }
+   
+    verifyToken(token) {
+        try {
+            var response = jwt.verify(token, JWT_KEY);
+            return response;
+
+        } catch (error) {
+            console.log("something went wrong in service layer");
+            console.log(error);
+        }
+    }
 
 
 }
