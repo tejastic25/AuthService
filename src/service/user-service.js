@@ -19,8 +19,11 @@ class UserService {
             return user;
 
         } catch (error) {
+            if (error.name == "SequelizeValidationError") {
+                throw error;
+            }
             console.log("something went wrong in service layer");
-            console.log(error);
+            throw error;
         }
     }
 
@@ -31,7 +34,7 @@ class UserService {
 
         } catch (error) {
             console.log("something went wrong in service layer");
-            console.log(error);
+            throw error;
         }
     }
 
@@ -47,7 +50,7 @@ class UserService {
 
         } catch (error) {
             console.log("something went wrong in service layer");
-            console.log(error);
+            throw error;
         }
     }
 
@@ -66,19 +69,19 @@ class UserService {
 
         } catch (error) {
             console.log("something went wrong in service layer");
-            console.log(error);
+            throw error;
         }
     }
 
     createToken(user) {
         try {
             var token = jwt.sign(user, JWT_KEY, { expiresIn: '1h' });
-            console.log(token);
+            // console.log(token);
             return token;
 
         } catch (error) {
             console.log("something went wrong in service layer");
-            console.log(error);
+            throw error;
         }
     }
 
@@ -89,7 +92,7 @@ class UserService {
 
         } catch (error) {
             console.log("something went wrong in service layer");
-            console.log(error);
+            throw error;
         }
     }
 
@@ -100,7 +103,7 @@ class UserService {
 
         } catch (error) {
             console.log("something went wrong in service layer");
-            console.log(error);
+            throw error;
         }
     }
 
@@ -109,7 +112,7 @@ class UserService {
             return bcrypt.compareSync(userInputPlainPassword, encryptedPassword);
         } catch (error) {
             console.log("something went wrong in service layer");
-            console.log(error);
+            throw error;
         }
     }
 
@@ -124,7 +127,7 @@ class UserService {
             return user.hasRole(adminRole);
         } catch (error) {
             console.log("something went wrong in service layer");
-            console.log(error);
+            throw error;
         }
     }
 

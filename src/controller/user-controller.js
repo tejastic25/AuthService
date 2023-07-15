@@ -1,5 +1,6 @@
 const repository = require('../repository');
 const { UserService } = require('../service/index');
+const AppErrors = require('../utils/error-handler');
 const { ClientErrorCodes,
     ServerErrorCodes,
     SuccessCodes } = require('../utils/error-codes');
@@ -19,12 +20,11 @@ const CreateUser = async (req, res) => {
             err: {}
         });
     } catch (error) {
-        console.log("in the catch blog");
-        return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
+        return res.status(error.statusCode).json({
             data: {},
-            success: true,
-            message: "user doesn't created ",
-            err: error
+            success: false,
+            message: error.message,
+            err: error.explanation
         });
     }
 }
@@ -43,7 +43,7 @@ const GetById = async (req, res) => {
     } catch (error) {
         return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
             data: {},
-            success: true,
+            success: false,
             message: "error in fetching user ",
             err: error
         });
@@ -63,7 +63,7 @@ const SignIn = async (req, res) => {
     } catch (error) {
         return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
             data: {},
-            success: true,
+            success: false,
             message: "error in signing in user ",
             err: error
         });
@@ -84,7 +84,7 @@ const IsAuthenticated = async (req, res) => {
     } catch (error) {
         return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
             data: {},
-            success: true,
+            success: false,
             message: "error in authenticating user ",
             err: error
         });
@@ -103,7 +103,7 @@ const isAdmin = async (req, res) => {
     } catch (error) {
         return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
             data: {},
-            success: true,
+            success: false,
             message: "error in validating if admin ",
             err: error
         });
