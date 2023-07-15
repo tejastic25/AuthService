@@ -1,6 +1,7 @@
 const { UserRepository } = require('../repository/index');
 const { JWT_KEY } = require('../config/serverConfig');
 const jwt = require('jsonwebtoken');
+var validator = require("email-validator");
 const bcrypt = require('bcrypt');
 
 class UserService {
@@ -11,6 +12,9 @@ class UserService {
     async CreateUser(data) {
         try {
             const user = await this.repository.create(data);
+            if (!this.verifyEmail(data.email)) {
+                throw { error: "invalid email entered" };
+            }
             return user;
 
         } catch (error) {
@@ -69,6 +73,17 @@ class UserService {
         }
     }
 
+    verifyEmail(email) {
+        try {
+            const response = validator.validate(email);
+            return response;
+
+        } catch (error) {
+            console.log("something went wrong in service layer");
+            console.log(error);
+        }
+    }
+
     checkPassword(userInputPlainPassword, encryptedPassword) {
         try {
             return bcrypt.compareSync(userInputPlainPassword, encryptedPassword);
@@ -88,6 +103,7 @@ class UserService {
             if (!user) {
                 console.log("no user  with corresponding token exist");
             }
+
             return user.id;
 
         } catch (error) {
