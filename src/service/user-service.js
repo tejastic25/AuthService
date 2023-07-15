@@ -48,7 +48,7 @@ class UserService {
 
     createToken(user) {
         try {
-            var token = jwt.sign(user, JWT_KEY, { expiresIn: 60 });
+            var token = jwt.sign(user, JWT_KEY, { expiresIn: '1h' });
             console.log(token);
             return token;
 
@@ -72,6 +72,24 @@ class UserService {
     checkPassword(userInputPlainPassword, encryptedPassword) {
         try {
             return bcrypt.compareSync(userInputPlainPassword, encryptedPassword);
+        } catch (error) {
+            console.log("something went wrong in service layer");
+            console.log(error);
+        }
+    }
+
+    async IsAuthenticated(token) {
+        try {
+            const response = await this.verifyToken(token);
+            if (!response) {
+                throw { error: "invalid token" };
+            }
+            const user = await this.repository.getById(response.id);
+            if (!user) {
+                console.log("no user  with corresponding token exist");
+            }
+            return user.id;
+
         } catch (error) {
             console.log("something went wrong in service layer");
             console.log(error);

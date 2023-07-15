@@ -1,3 +1,4 @@
+const repository = require('../repository');
 const { UserService } = require('../service/index');
 const { ClientErrorCodes,
     ServerErrorCodes,
@@ -52,7 +53,7 @@ const GetById = async (req, res) => {
 const SignIn = async (req, res) => {
     try {
         const user = await userService.SignIn(req.body.email, req.body.password);
-        console.log(user);
+        // console.log(user);
         return res.status(SuccessCodes.OK).json({
             data: user,
             success: true,
@@ -69,6 +70,27 @@ const SignIn = async (req, res) => {
     }
 }
 
+const IsAuthenticated = async (req, res) => {
+    try {
+        const token = req.headers['x-access-token'];
+        const repsonse = await userService.IsAuthenticated(token);
+        return res.status(SuccessCodes.OK).json({
+            data: repsonse,
+            success: true,
+            message: "user is authenticated succesfully ",
+            err: {}
+        });
+
+    } catch (error) {
+        return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
+            data: {},
+            success: true,
+            message: "error in authenticating user ",
+            err: error
+        });
+    }
+}
+
 module.exports = {
-    CreateUser, GetById, SignIn
+    CreateUser, GetById, SignIn, IsAuthenticated
 }

@@ -6,5 +6,6 @@ const { ValidateUserAuth } = require('../../middlewares/index');
 router.post('/signUp', UserController.CreateUser);
 //user signin routes
 router.post('/signIn', ValidateUserAuth, UserController.SignIn);
+router.get('/isAuthenticated', UserController.IsAuthenticated);
 
 module.exports = router;
