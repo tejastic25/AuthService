@@ -90,7 +90,26 @@ const IsAuthenticated = async (req, res) => {
         });
     }
 }
+const isAdmin = async (req, res) => {
+    try {
+        const response = await userService.isAdmin(req.body.id);
+        return res.status(SuccessCodes.OK).json({
+            data: response,
+            success: true,
+            message: "admin authenticated succesfully ",
+            err: {}
+        });
+
+    } catch (error) {
+        return res.status(ServerErrorCodes.INTERNAL_SERVER_ERROR).json({
+            data: {},
+            success: true,
+            message: "error in validating if admin ",
+            err: error
+        });
+    }
+}
 
 module.exports = {
-    CreateUser, GetById, SignIn, IsAuthenticated
+    CreateUser, GetById, SignIn, IsAuthenticated, isAdmin
 }

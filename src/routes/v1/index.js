@@ -7,5 +7,6 @@ router.post('/signUp', UserController.CreateUser);
 //user signin routes
 router.post('/signIn', ValidateUserAuth, UserController.SignIn);
 router.get('/isAuthenticated', UserController.IsAuthenticated);
+router.get('/isAdmin', UserController.isAdmin);
 
 module.exports = router;

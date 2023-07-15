@@ -1,4 +1,5 @@
 const { UserRepository } = require('../repository/index');
+const { User, Role } = require('../models/index');
 const { JWT_KEY } = require('../config/serverConfig');
 const jwt = require('jsonwebtoken');
 var validator = require("email-validator");
@@ -50,6 +51,25 @@ class UserService {
         }
     }
 
+    async IsAuthenticated(token) {
+        try {
+            const response = await this.verifyToken(token);
+            if (!response) {
+                throw { error: "invalid token" };
+            }
+            const user = await this.repository.getById(response.id);
+            if (!user) {
+                console.log("no user  with corresponding token exist");
+            }
+
+            return user.id;
+
+        } catch (error) {
+            console.log("something went wrong in service layer");
+            console.log(error);
+        }
+    }
+
     createToken(user) {
         try {
             var token = jwt.sign(user, JWT_KEY, { expiresIn: '1h' });
@@ -93,23 +113,20 @@ class UserService {
         }
     }
 
-    async IsAuthenticated(token) {
+    async isAdmin(userId) {
         try {
-            const response = await this.verifyToken(token);
-            if (!response) {
-                throw { error: "invalid token" };
-            }
-            const user = await this.repository.getById(response.id);
-            if (!user) {
-                console.log("no user  with corresponding token exist");
-            }
-
-            return user.id;
-
+            const user = await User.findByPk(userId);
+            const adminRole = await Role.findOne({
+                where: {
+                    name: 'ADMIN'
+                }
+            })
+            return user.hasRole(adminRole);
         } catch (error) {
             console.log("something went wrong in service layer");
             console.log(error);
         }
     }
+
 }
 module.exports = UserService;
